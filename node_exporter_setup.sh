@@ -17,11 +17,12 @@ useradd node_exporter -s /sbin/nologin
 # Install
 cd /tmp/
 wget --content-disposition $downloadURL
-tar xvfz node_exporter-*.*-amd64.tar.gz
-cp node_exporter-*.*-amd64/node_exporter /usr/sbin/
+tar xvfz node_exporter-*.*.tar.gz
+cp node_exporter-*.*/node_exporter /usr/sbin/
 rm -rf node_exporter*
 
 # Configure
+rm touch /etc/systemd/system/node_exporter.service
 touch /etc/systemd/system/node_exporter.service
 tee -a /etc/systemd/system/node_exporter.service > /dev/null <<EOT
 [Unit]
