@@ -9,7 +9,7 @@ apt-get install wget curl jq
 # Get Latest Version
 queryVersion=`curl --silent https://api.github.com/repos/prometheus/node_exporter/releases/latest | jq -r .tag_name`
 latestVersion="${queryVersion:1}"
-downloadURL="https://github.com/prometheus/prometheus/releases/download/${queryVersion}/node_exporter-${latestVersion}.linux-amd64.tar.gz"
+downloadURL="https://github.com/prometheus/node_exporter/releases/download/${queryVersion}/node_exporter-${latestVersion}.linux-amd64.tar.gz"
 
 # Setup User
 useradd node_exporter -s /sbin/nologin
