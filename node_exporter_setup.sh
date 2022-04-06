@@ -4,15 +4,24 @@ if [[ $UID != 0 ]]; then
     echo "sudo $0 $*"
     exit 1
 fi
-apt-get install wget
+apt-get install wget curl jq
 
+# Get Latest Version
+queryVersion=`curl --silent https://api.github.com/repos/prometheus/node_exporter/releases/latest | jq -r .tag_name`
+latestVersion="${queryVersion:1}"
+downloadURL="https://github.com/prometheus/prometheus/releases/download/${queryVersion}/node_exporter-${latestVersion}.linux-amd64.tar.gz"
+
+# Setup User
 useradd node_exporter -s /sbin/nologin
-cd /tmp/
-wget https://github.com/prometheus/node_exporter/releases/download/v1.3.1/node_exporter-1.3.1.linux-amd64.tar.gz
-tar xvfz node_exporter-*.*.tar.gz
-cp node_exporter-*.*/node_exporter /usr/sbin/
 
-rm -rf /etc/systemd/system/node_exporter.service
+# Install
+cd /tmp/
+wget --content-disposition $downloadURL
+tar xvfz node_exporter-*.*-amd64.tar.gz
+cp node_exporter-*.*-amd64/node_exporter /usr/sbin/
+rm -rf node_exporter*
+
+# Configure
 touch /etc/systemd/system/node_exporter.service
 tee -a /etc/systemd/system/node_exporter.service > /dev/null <<EOT
 [Unit]
@@ -30,6 +39,10 @@ EOT
 mkdir -p /etc/sysconfig
 touch /etc/sysconfig/node_exporter
 
+# Create and start service
 systemctl daemon-reload
 systemctl enable node_exporter
 systemctl start node_exporter
+
+# Finished
+echo "node_exporter installed"
