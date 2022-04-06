@@ -22,7 +22,7 @@ cp node_exporter-*.*/node_exporter /usr/sbin/
 rm -rf node_exporter*
 
 # Configure
-rm touch /etc/systemd/system/node_exporter.service
+rm /etc/systemd/system/node_exporter.service
 touch /etc/systemd/system/node_exporter.service
 tee -a /etc/systemd/system/node_exporter.service > /dev/null <<EOT
 [Unit]
