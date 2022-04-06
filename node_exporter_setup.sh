@@ -4,6 +4,7 @@ if [[ $UID != 0 ]]; then
     echo "sudo $0 $*"
     exit 1
 fi
+apt-get update
 apt-get install wget curl jq
 
 # Get Latest Version
